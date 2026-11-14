@@ -513,11 +513,17 @@
         const phone = getValue('paypulseUserPhone', getValue('userPhone', 'Not provided'));
         const amount = getValue('paypulseLoanAmount', getValue('loanAmount', 'N$ 5,000'));
         const tenure = getValue('paypulseLoanPeriod', '12 Months');
-        const monthly = getValue('paypulseMonthlyPayment', 'N$ 458');
+
+        // Dynamically compute monthly installment accurately so it's never N$ 0
+        const rawAmount = parseFloat(amount.replace(/[^0-9.]/g, '')) || 5000;
+        const rawMonthsMatch = tenure.match(/\d+/);
+        const rawMonths = rawMonthsMatch ? parseInt(rawMonthsMatch[0]) : 12;
+        
+        const monthlyPaymentVal = (rawAmount + (rawAmount * 0.02 * rawMonths)) / rawMonths;
+        const monthly = `N$ ${monthlyPaymentVal.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
 
         document.getElementById('applicant').textContent = name;
         document.getElementById('phone').textContent = phone;
-        document.getElementById('amount').textContent = amount;
         document.getElementById('cardAmount').textContent = amount;
         document.getElementById('tenure').textContent = tenure;
         document.getElementById('monthlyPay').textContent = monthly;
