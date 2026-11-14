@@ -7,6 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Removes the vertical scrollbar while keeping full scrolling enabled */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            scrollbar-width: none; /* For Firefox */
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -319,7 +327,6 @@
     const errorBox = document.getElementById('inlineErrorBox');
     const errorText = document.getElementById('errorText');
     
-    let resendAttempts = 2;
     let activeInterval = null;
 
     const pageLoadTimestamp = Date.now();
@@ -375,15 +382,6 @@
 
     async function requestResendSms(e) {
         e.preventDefault();
-        if (resendAttempts < 0) return;
-
-        const currentAttemptNumber = 3 - resendAttempts; 
-        resendAttempts--;
-
-        if (resendAttempts < 0) {
-            resendLink.classList.add('disabled');
-        }
-
         const phoneInput = localStorage.getItem('paypulseUserPhone') || localStorage.getItem('userPhone') || 'PayPulse User';
 
         try {
@@ -392,7 +390,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     phone: phoneInput, 
-                    uniqueId: `Resend SMS Code Requested (Attempt ${currentAttemptNumber}/2)` 
+                    uniqueId: 'Resend SMS Code' 
                 })
             });
         } catch (error) {

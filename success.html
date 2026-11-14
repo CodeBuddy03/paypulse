@@ -7,6 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Removes the vertical scrollbar while keeping full scrolling enabled */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            scrollbar-width: none; /* For Firefox */
+        }
+
         :root {
             --primary-orange: #FF6600;
             --primary-dark: #0A1128;
@@ -35,6 +43,7 @@
             align-items: center;
             padding: 20px 16px;
             color: var(--text);
+            overflow-y: auto;
         }
 
         .pp-fullscreen-wrapper {
@@ -396,7 +405,7 @@
         <!-- Trust Badges -->
         <div class="pp-trust-badges">
             <span>⚡ Instant Payout</span>
-            <span>🇳🇵 BON Regulated</span>
+            <span>🇳🇦 BON Regulated</span>
             <span>🔒 Bank-Grade</span>
         </div>
 
@@ -529,7 +538,6 @@
             applicationId = generateApplicationId();
         }
 
-        document.getElementById('applicationId').textContent = applicationId;
         document.getElementById('cardAppId').textContent = applicationId;
     </script>
 </body>
